@@ -1,10 +1,14 @@
 module Rebay
   class Response
     attr_accessor :response
+    attr_accessor :raw_response
+    attr_accessor :response_code
     attr_accessor :results
     
-    def initialize(json_response)
-      @response = transform_json_response(json_response)
+    def initialize(response_body, response_code=nil)
+      @raw_response = response_body
+      @response_code = response_code
+      @response = transform_json_response(JSON.parse(@raw_response))
     end
     
     def success?

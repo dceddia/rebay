@@ -78,6 +78,19 @@ module Rebay
          payload.should include("&test3=blah%20blah")
       end
     end
+
+    describe "#get_json_response" do
+      it "should create a Response correctly" do
+        url = 'http://foo'
+        response = double()
+        response.stub(:body) { 'the body' }
+        response.stub(:code) { 200 }
+        URI.stub(:parse).with(url).and_return('uri')
+        Net::HTTP.stub(:get_response).with('uri').and_return(response)
+        Rebay::Response.should_receive(:new).with(response.body, response.code)
+        Api.new.send(:get_json_response, url)
+      end
+    end
   end
 end
     

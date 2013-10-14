@@ -4,7 +4,7 @@ module Rebay
   describe Finding do
     before(:each) do
         @finder = Finding.new
-        @finder.stub!(:get_json_response).and_return(Rebay::Response.new({"Ack" => 'Success'}))
+        @finder.stub!(:get_json_response).and_return(Rebay::Response.new({"Ack" => 'Success'}.to_json))
     end
 
     it "should specify base url" do
@@ -63,7 +63,7 @@ module Rebay
       end
       
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_advanced"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_advanced")
         @finder.stub!(:get_json_response).and_return(Rebay::Response.new(json))
         response = @finder.find_items_advanced({:keywords => 'whatevs'})
         
@@ -73,7 +73,7 @@ module Rebay
       end
       
       it "should work with 1 result" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_advanced_one_item"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_advanced_one_item")
         @finder.stub!(:get_json_response).and_return(Rebay::Response.new(json))
         response = @finder.find_items_advanced({:categoryId => 1})
         count = 0
@@ -97,7 +97,7 @@ module Rebay
       end
       
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_by_category"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_by_category")
         @finder.stub!(:get_json_response).and_return(Rebay::Response.new(json))
         response = @finder.find_items_by_category({:categoryId => 1})
         
@@ -121,7 +121,7 @@ module Rebay
       end
       
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_by_product"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_by_product")
         @finder.stub!(:get_json_response).and_return(Rebay::Response.new(json))
         response = @finder.find_items_by_product({:productId => 1})
         
@@ -145,7 +145,7 @@ module Rebay
       end
       
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_by_keywords"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_by_keywords")
         @finder.stub!(:get_json_response).and_return(Rebay::Response.new(json))
         response = @finder.find_items_by_keywords({:keywords => 'whatevs'})
         
@@ -201,7 +201,7 @@ module Rebay
       end
       
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/finding/get_search_keywords_recommendation"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/finding/get_search_keywords_recommendation")
         @finder.stub!(:get_json_response).and_return(Rebay::Response.new(json))
         response = @finder.get_search_keywords_recommendation({:keywords => 'whatevs'})
         
@@ -223,7 +223,7 @@ module Rebay
       end
       
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/finding/get_version"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/finding/get_version")
         @finder.stub!(:get_json_response).and_return(Rebay::Response.new(json))
         response = @finder.get_version
         

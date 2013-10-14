@@ -2,9 +2,11 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 module Rebay
   describe Shopping do
+    let(:success_response) { Rebay::Response.new({"Ack" => "Success"}.to_json) }
+
     before(:each) do
       @shopper = Shopping.new
-      @shopper.stub!(:get_json_response).and_return(Rebay::Response.new({"Ack" => "Success"}))
+      @shopper.stub!(:get_json_response).and_return(success_response)
     end
 
     it "should specify base url" do
@@ -98,7 +100,7 @@ module Rebay
       end
 
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/shopping/get_category_info"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/shopping/get_category_info")
         @shopper.stub!(:get_json_response).and_return(Rebay::Response.new(json))
         
         response = @shopper.get_category_info({:CategoryID => 1})
@@ -123,7 +125,7 @@ module Rebay
       end
 
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/shopping/find_products"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/shopping/find_products")
         @shopper.stub!(:get_json_response).and_return(Rebay::Response.new(json))
 
         response = @shopper.find_products({:QueryKeywords => 'whatevs'})
@@ -148,7 +150,7 @@ module Rebay
       end
 
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/shopping/find_half_products"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/shopping/find_half_products")
         @shopper.stub!(:get_json_response).and_return(Rebay::Response.new(json))
 
         response = @shopper.find_half_products({:QueryKeywords => 'whatevs'})
@@ -243,7 +245,7 @@ module Rebay
       end
 
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/shopping/find_popular_searches"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/shopping/find_popular_searches")
         @shopper.stub!(:get_json_response).and_return(Rebay::Response.new(json))
 
         response = @shopper.find_popular_searches({:CategoryID => 1})
@@ -264,7 +266,7 @@ module Rebay
       end
 
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/shopping/find_popular_items"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/shopping/find_popular_items")
         @shopper.stub!(:get_json_response).and_return(Rebay::Response.new(json))
 
         response = @shopper.find_popular_items({:CategoryID => 1})
@@ -285,7 +287,7 @@ module Rebay
       end
 
       it "should iterate over results" do
-        json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/shopping/find_reviews_and_guides"))
+        json = File.read(File.dirname(__FILE__) + "/json_responses/shopping/find_reviews_and_guides")
         @shopper.stub!(:get_json_response).and_return(Rebay::Response.new(json))
         response = @shopper.find_reviews_and_guides
 

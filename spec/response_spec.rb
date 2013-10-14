@@ -4,14 +4,14 @@ module Rebay
   describe Response do
     context "on creation" do
       it "should transform the happy json" do
-        json_happy = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/finding/get_search_keywords_recommendation_happy"))
+        json_happy = File.read(File.dirname(__FILE__) + "/json_responses/finding/get_search_keywords_recommendation_happy")
         response = Response.new(json_happy)
         response.response.should eq({"getSearchKeywordsRecommendationResponse" => {"ack" => "Success", "version" => "1.5.0", 
                                                                                   "timestamp" => "2010-08-13T21:11:02.539Z", "keywords" => "accordion"}})
       end
       
       it "should transform the sad json" do
-        json_sad = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/finding/get_search_keywords_recommendation_sad"))
+        json_sad = File.read(File.dirname(__FILE__) + "/json_responses/finding/get_search_keywords_recommendation_sad")
         response = Response.new(json_sad)
         response.response.should eq({"getSearchKeywordsRecommendationResponse" =>
                         {"ack" => "Warning",
@@ -25,42 +25,56 @@ module Rebay
     end
     
     it "should return success" do
-      response = Response.new({"Ack" => "Success"})
+      response = Response.new({"Ack" => "Success"}.to_json)
       response.success?.should be_true
       response.failure?.should be_false
     end
+
+    it "should expose the raw response and parsed response" do
+      input = {"Ack" => "Success"}.to_json
+      response = Response.new(input)
+      response.success?.should be_true
+      response.raw_response.should == input
+      response.response.should == JSON.parse(input)
+    end
+
+    it "should expose the response code, or nil if none given" do
+      Response.new({"Ack" => "Success"}.to_json, 200).response_code.should == 200
+      Response.new({"Ack" => "Success"}.to_json).response_code.should be_nil
+    end
   
     it "should return failure" do
-      response = Response.new({"Ack" => "Failure"})
+      response = Response.new({"Ack" => "Failure"}.to_json)
       response.failure?.should be_true
       response.success?.should be_false
     end
   
     it "should trim response" do
-      response = Response.new({"Ack" => "Failure", "test" => "test"})
+      response = Response.new({"Ack" => "Failure", "test" => "test"}.to_json)
       response.trim("test")
       response.response.should eq("test")
     end
     
     it "should trim response with syn" do
-      response = Response.new({"Ack" => "Failure", "test" => "test"})
+      response = Response.new({"Ack" => "Failure", "test" => "test"}.to_json)
       response.trim(:test)
       response.response.should eq("test")
     end
   
     it "should not trim response" do
-      response = Response.new({"Ack" => "Failure", "test" => "test"})
+      json = {"Ack" => "Failure", "test" => "test"}.to_json
+      response = Response.new(json)
       response.trim(:nothing)
-      response.response.should eq({"Ack" => "Failure", "test" => "test"})
+      response.response.should eq(JSON.parse(json))
     end
     
     it "should set result key" do
-      response = Response.new({})
+      response = Response.new({}.to_json)
       response.should respond_to(:results)
     end
     
     it "should provide empty iterator without a result key" do
-      response = Response.new({})
+      response = Response.new({}.to_json)
       count = 0
       response.each { |r| count = count + 1 }
       count.should eq(0)
@@ -68,7 +82,7 @@ module Rebay
     
     context "using find items advanced json" do
       before(:each) do
-        @json = JSON.parse(File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_advanced"))
+        @json = File.read(File.dirname(__FILE__) + "/json_responses/finding/find_items_advanced")
         @response = Response.new(@json)
         @response.trim(:findItemsAdvancedResponse)
         @proper = {"ack"=>"Success", "version"=>"1.7.0", "timestamp"=>"2010-09-29T01:53:58.039Z",
