@@ -24,6 +24,13 @@ module Rebay
       end
     end
     
+    it "should handle non-JSON responses" do
+      response = Response.new('', 302)
+      response.response.should == {}
+      response.failure?.should be_true
+      response.success?.should be_false
+    end
+
     it "should return success" do
       response = Response.new({"Ack" => "Success"}.to_json)
       response.success?.should be_true

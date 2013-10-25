@@ -8,15 +8,19 @@ module Rebay
     def initialize(response_body, response_code=nil)
       @raw_response = response_body
       @response_code = response_code
-      @response = transform_json_response(JSON.parse(@raw_response))
+      begin
+        @response = transform_json_response(JSON.parse(@raw_response))
+      rescue
+        @response = {}
+      end
     end
     
     def success?
-      @response["Ack"] == 'Success' || @response['ack'] == 'Success'
+      !@response.empty? && (@response["Ack"] == 'Success' || @response['ack'] == 'Success')
     end
     
     def failure?
-      @response["Ack"] == 'Failure' || @response['ack'] == 'Failure'
+      @response.empty? || @response["Ack"] == 'Failure' || @response['ack'] == 'Failure'
     end
     
     def trim(key)
