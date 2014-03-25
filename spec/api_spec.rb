@@ -87,7 +87,7 @@ module Rebay
         response.stub(:code) { 200 }
         URI.stub(:parse).with(url).and_return('uri')
         Net::HTTP.stub(:get_response).with('uri').and_return(response)
-        Rebay::Response.should_receive(:new).with(response.body, response.code)
+        Rebay::Response.should_receive(:new).with(response.body, response.code, url)
         Api.new.send(:get_json_response, url)
       end
     end

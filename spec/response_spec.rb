@@ -49,6 +49,11 @@ module Rebay
       Response.new({"Ack" => "Success"}.to_json, 200).response_code.should == 200
       Response.new({"Ack" => "Success"}.to_json).response_code.should be_nil
     end
+
+    it "should expose the request URL, or nil if none given" do
+      Response.new({"Ack" => "Success"}.to_json, 200, 'the_url').request_url.should == 'the_url'
+      Response.new({"Ack" => "Success"}.to_json, 200).request_url.should be_nil
+    end
   
     it "should return failure" do
       response = Response.new({"Ack" => "Failure"}.to_json)

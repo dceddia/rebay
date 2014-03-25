@@ -42,7 +42,7 @@ module Rebay
     
     def get_json_response(url)
       response = Net::HTTP.get_response(URI.parse(url))
-      Rebay::Response.new(response.body, response.code)
+      Rebay::Response.new(response.body, response.code, url)
     end
 
     def build_rest_payload(params)

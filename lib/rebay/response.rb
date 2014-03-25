@@ -4,10 +4,12 @@ module Rebay
     attr_accessor :raw_response
     attr_accessor :response_code
     attr_accessor :results
+    attr_accessor :request_url
     
-    def initialize(response_body, response_code=nil)
+    def initialize(response_body, response_code=nil, request_url=nil)
       @raw_response = response_body
       @response_code = response_code
+      @request_url = request_url
       begin
         @response = transform_json_response(JSON.parse(@raw_response))
       rescue
